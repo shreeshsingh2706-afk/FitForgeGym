@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getUsers, registerUser, getStats } from "./services/api";
+import { getUsers, registerUser, getStats, checkHealth } from "./services/api";
 
 // ─── Inline Styles (keeping same neon aesthetic as original) ───────────────
 const styles = {
@@ -181,14 +181,14 @@ export default function App() {
     loadData();
   }, []);
 
+  const isMockMode = !process.env.REACT_APP_API_URL;
+
   const loadData = async () => {
     try {
-      // Health check
-      await fetch((process.env.REACT_APP_API_URL || "http://localhost:8080/api") + "/hello");
-      setBackendOk(true);
+      const health = await checkHealth();
+      setBackendOk(health.status === "mock" ? null : true);
     } catch {
       setBackendOk(false);
-      setMessage({ type: "error", text: "⚠️ Cannot reach backend. Is Spring Boot running on port 8080?" });
     }
 
     // Load users
@@ -233,8 +233,8 @@ export default function App() {
       {/* ── Navbar ── */}
       <nav style={styles.navbar}>
         <a href="#" style={styles.brand}>⚡ FitForge Gym</a>
-        <span style={styles.backendStatus(backendOk)}>
-          {backendOk === null ? "Connecting..." : backendOk ? "● API Connected" : "● API Offline"}
+        <span style={styles.backendStatus(isMockMode ? null : backendOk)}>
+          {isMockMode ? "✦ Demo Mode" : backendOk === null ? "Connecting..." : backendOk ? "● API Connected" : "● API Offline"}
         </span>
         <ul style={styles.navLinks}>
           {["Register", "Plans", "Members"].map((item) => (
