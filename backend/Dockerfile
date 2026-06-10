@@ -25,5 +25,5 @@ COPY --from=build /app/target/fitforge-backend-1.0.0.jar app.jar
 # Expose port (Render injects PORT env var)
 EXPOSE 8080
 
-# Start the Spring Boot app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Start the Spring Boot app with memory limits for Render free tier (512MB)
+ENTRYPOINT ["java", "-Xmx256m", "-Xms128m", "-XX:+UseSerialGC", "-jar", "app.jar"]
