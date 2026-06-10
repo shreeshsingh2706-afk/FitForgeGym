@@ -34,10 +34,13 @@ services:
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://fitforge-backend-ilqp.onrender.com/api
     routes:
       - type: rewrite
         source: /api/*
-        destination: https://fitforge-backend.onrender.com/api/*   # Update with your backend URL
+        destination: https://fitforge-backend-ilqp.onrender.com/api/*
       - type: rewrite
         source: /*
         destination: /index.html

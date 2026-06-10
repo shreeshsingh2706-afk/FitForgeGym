@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = {"http://localhost:3000", "http://your-aws-domain.com"})
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -40,6 +40,16 @@ public class UserController {
         response.put("message", "Welcome to FitForge API! 💪");
         response.put("status", "running");
         response.put("version", "1.0.0");
+        
+        try {
+            // Test database connectivity
+            long memberCount = userService.getMemberCount();
+            response.put("database", "connected");
+            response.put("memberCount", String.valueOf(memberCount));
+        } catch (Exception e) {
+            response.put("database", "error: " + e.getMessage());
+        }
+        
         return ResponseEntity.ok(response);
     }
 
