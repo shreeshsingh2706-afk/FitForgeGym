@@ -4,7 +4,9 @@
 // Falls back to localStorage mock when no backend is deployed
 // ============================================
 
-const BASE_URL = process.env.REACT_APP_API_URL; // undefined = use mock
+const BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+  ? "http://localhost:8080/api"
+  : "https://fitforge-backend-ilqp.onrender.com/api";
 
 // ── LocalStorage Mock Helpers ────────────────────────────────────────────────
 const LS_KEY = "fitforge_members";

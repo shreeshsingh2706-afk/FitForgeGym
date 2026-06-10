@@ -181,7 +181,7 @@ export default function App() {
     loadData();
   }, []);
 
-  const isMockMode = !process.env.REACT_APP_API_URL;
+  const isMockMode = false;
 
   const loadData = async () => {
     try {
